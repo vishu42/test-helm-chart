@@ -1,0 +1,3 @@
+image:
+  args: ["-listen=:8080"]
+  tag: s0.0.15 # {"$imagepolicy": "flux-system:test-helm-chart-stg:tag"}
