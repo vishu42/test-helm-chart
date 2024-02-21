@@ -29,3 +29,5 @@ jobs:
       version: ${{ needs.ci.outputs.version }}
       environment: staging
     secrets: inherit
+permissions:
+  contents: write
