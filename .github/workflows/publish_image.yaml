@@ -1,0 +1,61 @@
+name: Release Image
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+jobs:
+  deploy:
+    name: "deploy - ${{ inputs.environment }}"
+    runs-on: ubuntu-20.04
+    environment: ${{ inputs.environment }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v2
+        with:
+          ref: refs/tags/${{ inputs.version }}
+      - name: strip prefix from version and add the env name to the tag
+        id: new_version
+        run: |
+          # set -x
+          # get the version from the input
+          version=${{ inputs.version }}
+          # strip the first character from the version
+          version=${version:1}
+          envPrefix=""
+          # if the environment is not prod
+          if [ "${{ inputs.environment }}" != "prod" ]; then
+            envPrefix=$(echo "${{ inputs.environment }}" | cut -c1)
+          fi
+          version="${envPrefix}${version}"
+          git tag $version
+          git push --tags
+          # export the version for the next steps
+          echo "VERSION=$version" >> $GITHUB_OUTPUT
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/test-app:${{ steps.new_version.outputs.VERSION }}

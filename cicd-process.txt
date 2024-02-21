@@ -1,0 +1,40 @@
+Environments
+===========
+- Prod
+- Stage
+
+=======
+GIT BRANCHING
+=======
+
+              A---------B---------C feat/somefeat -> no tag
+              /
+    D---------E---------F---------G develop
+    |         |         |         |
+    v0.0.1    v0.0.2    v0.0.3    v0.0.4 -> tags confirming CI run
+    s0.0.1    s0.0.2    s0.0.3    s0.0.4 -> tags for stage env
+    0.0.1     0.0.2     0.0.3     0.0.4  -> tags for prod env
+
+
+FLUX can watch container registries
+-----------------------------------
+
+flux -> docker.io/vishu42/test-app
+
+whenever a tag with s prefix appears in container registry -> deploy the tag to staging
+whenever a tag no prefix appears in container registry -> deploy the tag to prod
+
+
+PUSH TO DEVELOP
+---------------
+branch is tagged with a tag such as v0.0.1
+
+DEPLOY TO STAGE
+--------------
+suppose we want to deploy v0.0.1 tag to stage
+we would replace the prefix v with the initial of the target env (in stage s)
+
+DEPLOY TO PROD
+--------------
+we would replace the prefix v with no prefix 
+

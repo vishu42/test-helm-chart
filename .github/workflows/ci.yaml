@@ -1,0 +1,29 @@
+name: CI
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  ci:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.head_ref }}   
+        fetch-depth: 0 
+    - name: Git Version
+      id: version
+      uses: codacy/git-version@2.7.1   
+      with: 
+        release-branch: develop 
+        prefix: v 
+    - name: Tag the version
+      run: |
+        git tag ${{ steps.version.outputs.version }}
+        git push --tags
+  publish_artifact:
+    needs: ci
+    uses: ./.github/workflows/publish_image.yaml
+    with:
+      version: ${{ needs.ci.outputs.version }}
+      environment: staging
+    secrets: inherit
