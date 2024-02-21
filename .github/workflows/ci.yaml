@@ -22,6 +22,8 @@ jobs:
         run: |
           git tag ${{ steps.version.outputs.version }}
           git push --tags
+    outputs:
+      version: ${{ steps.version.outputs.version }}
   publish_artifact:
     needs: ci
     uses: ./.github/workflows/publish_image.yaml
