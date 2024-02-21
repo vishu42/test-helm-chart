@@ -1,4 +1,4 @@
 image:
   args: ["-listen=:8080"]
-  tag: 0.0.11 # {"$imagepolicy": "flux-system:test-helm-chart-prod:tag"}
+  tag: 0.0.2 # {"$imagepolicy": "flux-system:test-helm-chart-prod:tag"}
 
