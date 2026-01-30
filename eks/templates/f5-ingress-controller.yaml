@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: f5-nginx-ingress
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: nginx-ingress
+    repoURL: ghcr.io/nginx/charts
+    targetRevision: 1.4.0
+    helm:
+      releaseName: f5-nginx-ingress
+      values: |
+        controller:
+          service:
+            annotations:
+              service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: nginx-ingress
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
