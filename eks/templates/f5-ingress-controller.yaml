@@ -13,13 +13,6 @@ spec:
     targetRevision: 1.4.0
     helm:
       releaseName: f5-nginx-ingress
-      values: |
-        controller:
-          service:
-            annotations:
-                service.beta.kubernetes.io/aws-load-balancer-type: "external"
-                service.beta.kubernetes.io/aws-load-balancer-scheme: "internal"
-                service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: nginx-ingress
