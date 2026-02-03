@@ -18,8 +18,8 @@ spec:
           service:
             annotations:
               service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-              service.beta.kubernetes.io/aws-load-balancer-type: external
-              aws-load-balancer-scheme: internal
+              service.beta.kubernetes.io/aws-load-balancer-type: "external"
+              service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: nginx-ingress
